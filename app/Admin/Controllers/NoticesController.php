@@ -52,26 +52,26 @@ class NoticesController extends AdminController
      * @param mixed $id
      * @return Show
      */
-    protected function detail($id)
-    {
-        $show = new Show(Notice::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('dept', __('Dept'));
-        $show->field('filepath', __('Filepath'));
-        $show->field('user', __('User'));
-        $show->field('date_create', __('Date create'));
-        $show->field('date_modify', __('Date modify'));
-        $show->field('date_delete', __('Date delete'));
-        $show->field('notice_no', __('Notice no'));
-        $show->field('date_until', __('Date until'));
-        $show->field('first_path', __('First path'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-
-        return $show;
-    }
+//    protected function detail($id)
+//    {
+//        $show = new Show(Notice::findOrFail($id));
+//
+//        $show->field('id', __('Id'));
+//        $show->field('name', __('Name'));
+//        $show->field('dept', __('Dept'));
+//        $show->field('filepath', __('Filepath'));
+//        $show->field('user', __('User'));
+//        $show->field('date_create', __('Date create'));
+//        $show->field('date_modify', __('Date modify'));
+//        $show->field('date_delete', __('Date delete'));
+//        $show->field('notice_no', __('Notice no'));
+//        $show->field('date_until', __('Date until'));
+//        $show->field('first_path', __('First path'));
+//        $show->field('created_at', __('Created at'));
+//        $show->field('updated_at', __('Updated at'));
+//
+//        return $show;
+//    }
 
     /**
      * Make a form builder.
