@@ -8,6 +8,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Tab;
+use Encore\Admin\Widgets\Table;
 
 class OrderChecksController extends AdminController
 {
@@ -52,27 +54,23 @@ class OrderChecksController extends AdminController
         return $show;
     }
 
-//    protected function form()
-//    {
-//        $form = new Form(new OrderCheck);
+    protected function form()
+    {
+        $form = new Form(new OrderCheck);
+
+        $form->text('report_name', __('報告名稱'));
 //
-//        $form->text('report_name', __('報告名稱'));
-////
-//        $form->number('sort', __('排序'));
-//
-//        // 直接添加一对多的关联模型
-//        $form->hasMany('skus', 'SKU 列表', function (Form\NestedForm $form) {
-//            $form->text('title', 'SKU 名称')->rules('required');
-//            $form->text('description', 'SKU 描述')->rules('required');
-//            $form->text('price', '单价')->rules('required|numeric|min:0.01');
-//            $form->text('stock', '剩余库存')->rules('required|integer|min:0');
-//        });
-//
-//        return $form;
-//    }
+        $form->number('sort', __('排序'));
+
+
+        $form->listbox('report_name', trans('admin.permissions'));
+
+
+        return $form;
+    }
 
     public function create(Content $content)
     {
-        return view('admin.orderchecks.create');
+        return view('admin.orderchecks.create2');
     }
 }

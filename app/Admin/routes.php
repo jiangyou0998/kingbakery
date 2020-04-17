@@ -32,4 +32,16 @@ Route::group([
     $router->post('orderchecks', 'OrderChecksController@store');
     $router->get('orderchecks/{id}/edit', 'OrderChecksController@edit');
     $router->put('orderchecks/{id}', 'OrderChecksController@update');
+
+    //貨品
+    $router->get('goodsmenu', 'GoodsMenuController@index');
+    $router->get('goodsmenu/create', 'GoodsMenuController@create');
+    $router->post('goodsmenu', 'GoodsMenuController@store');
+    $router->get('goodsmenu/{id}/edit', 'GoodsMenuController@edit');
+    $router->put('goodsmenu/{id}', 'GoodsMenuController@update');
+
+//    $router->resource('goodsmenu', GoodsMenuController::class);
+    $router->resource('goodsgroups', GoodsGroupsController::class);
+
+    $router->resource('auth/category', CategoryController::class);
 });
