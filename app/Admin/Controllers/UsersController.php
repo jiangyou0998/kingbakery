@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends AdminController
 {
@@ -24,6 +25,8 @@ class UsersController extends AdminController
 
         $grid->email('邮箱');
 
+//        $grid->password('密碼');
+
         $grid->email_verified_at('已验证邮箱')->display(function ($value) {
             return $value ? '是' : '否';
         });
@@ -31,9 +34,9 @@ class UsersController extends AdminController
         $grid->created_at('注册时间');
 
         // 不在页面显示 `新建` 按钮，因为我们不需要在后台新建用户
-        $grid->disableCreateButton();
+//        $grid->disableCreateButton();
         // 同时在每一行也不显示 `编辑` 按钮
-        $grid->disableActions();
+//        $grid->disableActions();
 
         $grid->tools(function ($tools) {
             // 禁用批量删除按钮
@@ -72,16 +75,19 @@ class UsersController extends AdminController
      *
      * @return Form
      */
-//    protected function form()
-//    {
-//        $form = new Form(new User);
-//
-//        $form->text('name', __('Name'));
-//        $form->email('email', __('Email'));
-//        $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
-//        $form->password('password', __('Password'));
-//        $form->text('remember_token', __('Remember token'));
-//
-//        return $form;
-//    }
+    protected function form()
+    {
+        $form = new Form(new User);
+        $form->text('name', __('Name'));
+        $form->email('email', __('Email'));
+        $form->password('password', __('Password'));
+
+        //保存前回调
+        $form->saving(function (Form $form) {
+            //...
+            $form->password = Hash::make($form->password);
+        });
+
+        return $form;
+    }
 }

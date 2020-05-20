@@ -11,6 +11,10 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->get('users', 'UsersController@index');
+    $router->get('users/create', 'UsersController@create');
+    $router->post('users', 'UsersController@store');
+    $router->get('users/{id}/edit', 'UsersController@edit');
+    $router->put('users/{id}', 'UsersController@update');
 
     //公告
     $router->get('notices', 'NoticesController@index');
@@ -39,6 +43,7 @@ Route::group([
     $router->post('goodsmenu', 'GoodsMenuController@store');
     $router->get('goodsmenu/{id}/edit', 'GoodsMenuController@edit');
     $router->put('goodsmenu/{id}', 'GoodsMenuController@update');
+    $router->get('goodsmenu/group', 'GoodsMenuController@group');
 
 //    $router->resource('goodsmenu', GoodsMenuController::class);
     $router->resource('goodsgroups', GoodsGroupsController::class);

@@ -33,14 +33,14 @@ class OrdersController extends Controller
 //        dump($advance);
 
         $order = $order
-            ->select('orders.id AS orderID','orders.qty','orders.status','orders.order_date',
-                'goods_menus.name','goods_menus.no', 'goods_menus.base','goods_menus.min','goods_menus.cuttime','goods_menus.phase','goods_menus.id AS itemID',
-                'goods_cates.cate_name','units.name AS UoM')
+            ->select('orders.id AS orderID', 'orders.qty', 'orders.status', 'orders.order_date',
+                'goods_menus.name', 'goods_menus.no', 'goods_menus.base', 'goods_menus.min', 'goods_menus.cuttime', 'goods_menus.phase', 'goods_menus.id AS itemID',
+                'goods_cates.cate_name', 'units.name AS UoM')
             //還沒有寫user
-            ->where('orders.user',6)
-            ->where('orders.qty','>',0)
+            ->where('orders.user', 6)
+            ->where('orders.qty', '>', 0)
             ->where('orders.dept', $dept)
-            ->whereIn('orders.status',[0,1])
+            ->whereIn('orders.status', [0, 1])
             //還沒篩選時間
 
             ->join('goods_menus', 'product', '=', 'goods_menus.id')
@@ -53,20 +53,20 @@ class OrdersController extends Controller
         $curtime = date('Hi');
 //        dd($curtime);
 
-        foreach ($order as $o){
-            if($o['cuttime'] < $curtime && $advance-1 < $o['phase']){
+        foreach ($order as $o) {
+            if ($o['cuttime'] < $curtime && $advance - 1 < $o['phase']) {
                 $o['haveoutdate'] = 1;
             }
 
-            if($o['cuttime'] > $curtime && $advance < $o['phase']){
+            if ($o['cuttime'] > $curtime && $advance < $o['phase']) {
                 $o['haveoutdate'] = 1;
             }
 
         }
 
-        dump($order->toArray());
+//        dump($order->toArray());
 
-        return view('order.left')->with('order',$order);
+        return view('order.left')->with('order', $order);
     }
 
     public function rightTop()
@@ -84,29 +84,29 @@ class OrdersController extends Controller
             'group' => []
         ];
 
-        if($cateID){
+        if ($cateID) {
             $advance = session('advance');
             $date = date('Hi');
 
             //創建子查詢,查詢沒截單數據的數量
-            $joinSub = $goodsMenu->select('goods_menus.group_id',DB::raw('COUNT(*) as item_count'))
-                ->where(function ($query) use ($advance,$date) {
-                    $query->where(DB::raw('goods_menus.phase')  , '<=', $advance)
-                        ->where('goods_menus.cuttime' , '>=', $date )
-                        ->orWhere(function ($queryOr) use ($advance , $date) {
-                            $queryOr->where(DB::raw('goods_menus.phase+1')  , '<=', $advance)
-                                ->where('goods_menus.cuttime' , '<' , $date);
+            $joinSub = $goodsMenu->select('goods_menus.group_id', DB::raw('COUNT(*) as item_count'))
+                ->where(function ($query) use ($advance, $date) {
+                    $query->where(DB::raw('goods_menus.phase'), '<=', $advance)
+                        ->where('goods_menus.cuttime', '>=', $date)
+                        ->orWhere(function ($queryOr) use ($advance, $date) {
+                            $queryOr->where(DB::raw('goods_menus.phase+1'), '<=', $advance)
+                                ->where('goods_menus.cuttime', '<', $date);
                         });
-                })->where('goods_menus.status',1)->groupBy('goods_menus.group_id')->getQuery();
+                })->where('goods_menus.status', 1)->groupBy('goods_menus.group_id')->getQuery();
 
 //        dd($joinSub->get()->toArray());
 
             $goodsGroup = $goodsGroup->select('goods_groups.id', 'goods_groups.group_name')
                 //用joinSub方法連接子查詢
-                ->joinSub($joinSub, 'T2' , 'goods_groups.id' , '=' , 'T2.group_id')
-                ->where('goods_groups.status','<>',4)
-                ->where('goods_groups.cate_id',$cateID)
-                ->where('T2.item_count','>',0)
+                ->joinSub($joinSub, 'T2', 'goods_groups.id', '=', 'T2.group_id')
+                ->where('goods_groups.status', '<>', 4)
+                ->where('goods_groups.cate_id', $cateID)
+                ->where('T2.item_count', '>', 0)
                 ->whereNotNull('T2.item_count')
                 ->groupBy('goods_groups.id')
                 ->groupBy('goods_groups.sort');
@@ -127,34 +127,33 @@ class OrdersController extends Controller
 
         $goodsMenu = new GoodsMenu;
         $goodsMenu = $goodsMenu
-            ->select(DB::raw('goods_menus.id AS itemID'),DB::raw('goods_menus.name AS itemName'),
+            ->select(DB::raw('goods_menus.id AS itemID'), DB::raw('goods_menus.name AS itemName'),
                 'goods_menus.no', 'goods_menus.status', 'goods_menus.cuttime',
                 'goods_menus.phase', 'goods_menus.base', 'goods_menus.min',
                 DB::raw('units.name AS UoM'),
                 DB::raw('LEFT(goods_cates.cate_name, 2) AS suppName'))
-            ->join('units' , 'units.id', '=', 'goods_menus.unit')
+            ->join('units', 'units.id', '=', 'goods_menus.unit')
             ->join('goods_groups', 'goods_menus.group_id', '=', 'goods_groups.id')
-            ->join('goods_cates' , 'goods_groups.cate_id' ,'=' ,'goods_cates.id')
-            ->where('goods_menus.group_id' , $groupID)
-            ->whereNotIn('goods_menus.status',[2,4])
-        ;
+            ->join('goods_cates', 'goods_groups.cate_id', '=', 'goods_cates.id')
+            ->where('goods_menus.group_id', $groupID)
+            ->whereNotIn('goods_menus.status', [2, 4]);
 
         //判斷用戶是普通用戶,這裡需要改
         //管理員可以查看全部,不需要增加where條件
 
-        if(Auth::User()->id){
+        if (Auth::User()->id) {
 
             $advance = session('advance');
             $date = date('Hi');
 
 //            dump($advance);dd($date);
             $goodsMenu = $goodsMenu
-                ->where(function ($query) use ($advance , $date){
-                    $query->where(DB::raw('goods_menus.phase')  , '<=', $advance)
-                        ->where('goods_menus.cuttime' , '>=', $date )
-                        ->orWhere(function ($queryOr) use ($advance , $date) {
-                            $queryOr->where(DB::raw('goods_menus.phase+1')  , '<=', $advance)
-                                ->where('goods_menus.cuttime' , '<' , $date);
+                ->where(function ($query) use ($advance, $date) {
+                    $query->where(DB::raw('goods_menus.phase'), '<=', $advance)
+                        ->where('goods_menus.cuttime', '>=', $date)
+                        ->orWhere(function ($queryOr) use ($advance, $date) {
+                            $queryOr->where(DB::raw('goods_menus.phase+1'), '<=', $advance)
+                                ->where('goods_menus.cuttime', '<', $date);
                         });
                 });
         }
@@ -185,7 +184,7 @@ class OrdersController extends Controller
 //        dump($dayArray);
 
         $pageData = [
-            'dayArray'      => $dayArray
+            'dayArray' => $dayArray
         ];
 
         return view('order.selectday', $pageData);
@@ -196,7 +195,7 @@ class OrdersController extends Controller
     {
         $isSun = false;
 
-        if(date("D") == "Sun")
+        if (date("D") == "Sun")
             $isSun = true;
 
         return $isSun;
