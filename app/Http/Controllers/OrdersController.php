@@ -18,6 +18,12 @@ class OrdersController extends Controller
 
     public function cart(Request $request)
     {
+        $dept = trim($request->input('dept'));
+        $advance = trim($request->input('advance'));
+
+        session(['dept' => $dept,
+            'advance' => $advance]);
+
         return view('order.cart');
     }
 
