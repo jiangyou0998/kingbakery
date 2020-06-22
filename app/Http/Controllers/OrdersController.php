@@ -13,13 +13,23 @@ class OrdersController extends Controller
 {
     public function index(Request $request)
     {
+        return view('order.index');
+    }
+
+    public function cart(Request $request)
+    {
+        return view('order.cart');
+    }
+
+    public function edit(Request $request)
+    {
         $dept = trim($request->input('dept'));
         $advance = trim($request->input('advance'));
 
         session(['dept' => $dept,
             'advance' => $advance]);
 
-        return view('order.index');
+        return view('order.edit');
     }
 
     public function left(Order $order)
@@ -173,13 +183,13 @@ class OrdersController extends Controller
     }
 
     //
-    public function selectDay()
+    public function selectDay($advDays=14)
     {
 
         $isSun = $this->isSunday();
         $pageData['isSun'] = $isSun;
 
-        $dayArray = Order::getDayArray();
+        $dayArray = Order::getDayArray($advDays);
 
 //        dump($dayArray);
 

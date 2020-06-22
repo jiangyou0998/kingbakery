@@ -14,9 +14,7 @@ class Order extends Model
     }
 
     //
-    public static function getDayArray(){
-        $advDays = $_REQUEST['advDays'];
-
+    public static function getDayArray($advDays){
         for ($count = 1 ; $count <= $advDays ; $count ++){
             $dayStr = "特別安排";
             $date = date(strtotime("+".$count." day"));

@@ -3,11 +3,11 @@
 {{--    <META name="ROBOTS" content="NOINDEX,NOFOLLOW">--}}
         <meta http-equiv="Content-Type" content="text/html; charset=big5" />
         <title>內聯網</title>
-        <script src="js/jquery.min.js"></script>
+        <script src="/js/jquery.min.js"></script>
         </head>
 
 <body>
-<div align="left"><a target="_top" href="/order/selectday?advDays=14" >返回</a></div>
+<div align="left"><a target="_top" href="{{route('selectDay',14)}}" >返回</a></div>
 <!-- <form action="order_z_dept_2.php?action=confirm&dept=烘焙" method="post" id="cart" name="cart" target="_top">-->
 <div align="right"><strong><font color="#FF0000" size="+3">分店：
                 </font></strong></div>

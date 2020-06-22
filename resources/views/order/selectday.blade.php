@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.no_header_no_footer')
 @section('title', '選擇日期')
 
 @section('content')
@@ -18,47 +18,48 @@
         <input type="radio" name="dept" id="radio" value="F">樓面
 
 
-
         <table width="100%" border="1" align="center" cellpadding="3" cellspacing="0">
-        @foreach($dayArray as $key => $value)
-            <tr>
-                <td align="right"><strong>{{$value['dayStr']}}</strong></td>
-                <td align="left"><a href="javascript:opensupplier({{$key}});"><strong>{{$value['date']}}</strong></a></td>
-            </tr>
-        @endforeach
-
+            @foreach($dayArray as $key => $value)
+                <tr>
+                    <td align="right"><strong>{{$value['dayStr']}}</strong></td>
+                    <td align="left"><a
+                            href="javascript:opensupplier({{$key}});"><strong>{{$value['date']}}</strong></a></td>
+                </tr>
+            @endforeach
 
 
         </table>
 
         <div class="style3" style="font-size: 250%; text-align: center;">不同送貨日
             <span class="style4" style="color: red">必須</span>
-            分單</div>
+            分單
+        </div>
     </div>
 
 @stop
 
 @section('script')
     <script type="text/javascript">
-        function opensupplier(aa){
+        function opensupplier(aa) {
             var Obj = document.getElementsByName("dept");
             var bool = false;
-            for (var i = 0; i < Obj.length; i++){
-                if(Obj[i].checked==true){
-                    bool=true;break;
+            for (var i = 0; i < Obj.length; i++) {
+                if (Obj[i].checked == true) {
+                    bool = true;
+                    break;
                 }
             }
             var shop = 0;
-{{--            @if($_SESSION[type] == 3)--}}
-{{--            if((shop = $("#shop").val()) == '0'){--}}
-{{--                alert("請先選擇分店");--}}
-{{--                return;--}}
-{{--            }--}}
-{{--            @endif--}}
-            if(bool){
-                location.href = "/order?shop="+shop+"&dept="+Obj[i].value+"&advance="+aa;
+            {{--            @if($_SESSION[type] == 3)--}}
+                {{--            if((shop = $("#shop").val()) == '0'){--}}
+                {{--                alert("請先選擇分店");--}}
+                {{--                return;--}}
+                {{--            }--}}
+                {{--            @endif--}}
+            if (bool) {
+                location.href = "/order/cart?shop=" + shop + "&dept=" + Obj[i].value + "&advance=" + aa;
                 //this.close();
-            }else{
+            } else {
                 alert("請先選擇部門");
             }
 

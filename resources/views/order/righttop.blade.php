@@ -3,8 +3,7 @@
 <head>
     <META name="ROBOTS" content="NOINDEX,NOFOLLOW">
         <meta http-equiv="Content-Type" content="text/html; charset=big5" />
-        <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="js/json2.js" type="text/javascript"></script>
+        <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
         <title>內聯網</title>
         <style type="text/css">
             <!--
